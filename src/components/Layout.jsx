@@ -1,135 +1,138 @@
 import React, { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
-import { Box, List, ListItem, ListItemIcon, IconButton, Avatar, Typography } from "@mui/material";
+import { Outlet, Link, useLocation } from "react-router-dom";
+import { Box, List, ListItem, ListItemIcon, Avatar, Typography } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventIcon from '@mui/icons-material/Event';
 import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // Criando o tema claro
 const theme = createTheme({
     palette: {
-        mode: 'light',
+        mode: 'light', // Define o modo claro
         primary: {
-            main: '#1976d2',
+            main: '#1976d2', // Cor primária
         },
         background: {
-            default: '#f5f5f5',
-            paper: '#ffffff',
+            default: '#f5f5f5', // Cor de fundo principal da aplicação
+            paper: '#ffffff',   // Cor de fundo dos elementos de "papel"
         },
         text: {
-            primary: '#000000',
-            secondary: '#5f6368',
+            primary: '#000000', // Cor do texto principal
+            secondary: '#5f6368', // Cor do texto secundário
         },
     },
 });
 
 export const Layout = () => {
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState(false); // Começa fechado
+    const location = useLocation(); // Para identificar a rota atual
 
-    const toggleSidebar = () => {
-        setIsExpanded(!isExpanded);
+    // Funções para lidar com o hover
+    const handleMouseEnter = () => {
+        setIsExpanded(true); // Abre a barra lateral
+    };
+
+    const handleMouseLeave = () => {
+        setIsExpanded(false); // Fecha a barra lateral
     };
 
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: 'flex', height: '100vh' }}>
-
+                {/* Barra lateral */}
                 <Box
+                    onMouseEnter={handleMouseEnter}  // Abre quando o mouse passa por cima
+                    onMouseLeave={handleMouseLeave}  // Fecha quando o mouse sai
                     sx={{
-                        width: isExpanded ? 240 : 80,
-                        height: '100vh',
-                        bgcolor: '#E8E7E7',
+                        width: isExpanded ? 240 : 80,  // Largura da barra lateral dependendo do estado de expansão
+                        height: '100vh',  // Altura da barra lateral ocupando toda a tela
+                        bgcolor: '#E8E7E7',  // Cor de fundo da barra lateral
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: isExpanded ? 'flex-start' : 'center',
-                        paddingTop: 2,
-                        overflowY: 'auto', // 
-                        transition: 'width 0.5s ease-in-out',
-                        boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
-                        scrollbarWidth: 'thin',
-                        '&::-webkit-scrollbar': {
-                            width: '8px',
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#c1c1c1',
-                            borderRadius: '8px',
-                        },
+                        alignItems: isExpanded ? 'flex-start' : 'center',  // Alinhamento dos itens
+                        overflowY: 'auto',
+                        transition: 'width 0.5s ease-in-out',  // Transição suave para a mudança de largura
+                        boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',  // Sombra leve na barra lateral
                     }}
                 >
-                    {/* Botão de abrir e fechar */}
-                    <IconButton onClick={toggleSidebar} sx={{ alignSelf: isExpanded ? 'flex-end' : 'center' }}>
-                        {isExpanded ? <ChevronLeftIcon sx={{ color: '#545454' }} /> : <MenuIcon sx={{ color: '#545454' }} />}
-                    </IconButton>
 
-                    {/* Logo/Imagem no topo */}
+                    {/* Logo/Imagem no topo da barra lateral */}
                     <Avatar
-                        src="../public/judoPerfil3.svg" // Deixe a URL vazia para adicionar a imagem depois
+                        src="../public/judoPerfil3.svg" // URL da imagem
                         alt="Logo"
                         sx={{
-                            width: 100,
-                            height: 100,
-                            marginBottom: 3,
-                            alignSelf: 'center',
-                            transition: 'opacity 0.3s ease',
-                            opacity: isExpanded ? 1 : 0,
+                            width: 100,  // Largura do avatar
+                            height: 100,  // Altura do avatar
+                            marginBottom: 3,  // Margem inferior
+                            alignSelf: 'center',  // Centraliza o avatar
+                            transition: 'opacity 0.3s ease',  // Transição suave da opacidade
+                            opacity: isExpanded ? 1 : 0,  // Mostra ou esconde o avatar conforme a barra é expandida
                         }}
                     />
 
-                    {/* Ícones  Navegação */}
+                    {/* Lista de navegação com ícones */}
                     <List>
                         {[
-                            { text: 'Home', rota:'home', icon: <HomeIcon /> },
-                            { text: 'Dashboard',rota:'pagina1', icon: <DashboardIcon /> },
-                            { text: 'Calendario',rota:'pagina2', icon: <EventIcon /> },
-                            { text: 'sair',rota:'login', icon: <LogoutIcon /> },
+                            { text: 'Home', rota: 'home', icon: <HomeIcon /> },
+                            { text: 'Dashboard', rota: 'pagina1', icon: <DashboardIcon /> },
+                            { text: 'Calendario', rota: 'pagina2', icon: <EventIcon /> },
+                            { text: 'Sair', rota: 'login', icon: <LogoutIcon /> },
                         ].map((item, index) => (
                             <ListItem
                                 key={index}
                                 button
                                 component={Link}
-                                to={`/${item.rota.toLowerCase()}`}
+                                to={`/${item.rota.toLowerCase()}`}  // Gera o link para a rota correspondente
                                 sx={{
-                                    justifyContent: isExpanded ? 'flex-start' : 'center',
-                                    alignItems: 'center', // Centraliza o ícone e o texto verticalmente
-                                    color: '#545454',
-                                    transition: 'all 0.3s ease-in-out',
+                                    justifyContent: isExpanded ? 'flex-start' : 'center',  // Alinhamento horizontal
+                                    alignItems: 'center',  // Alinhamento vertical
+                                    color: '#545454',  // Cor inicial do item de lista
+                                    transition: 'all 0.3s ease-in-out',  // Transição suave para todas as propriedades
                                     '&:hover': {
-                                        // Remover fundo quadrado e aplicar cor no texto
-                                        backgroundColor: 'transparent',
-                                        color: '#000', // O texto fica mais escuro quando o mouse está sobre ele
+                                        backgroundColor: 'transparent',  // Não muda o fundo no hover
+                                        color: '#000000',  // Muda a cor do texto no hover
                                     },
                                 }}
                             >
+                                {/* Ícone de navegação */}
                                 <ListItemIcon
                                     sx={{
-                                        justifyContent: 'center',
-                                        minWidth: 'auto',
-                                        color: '#545454',
-                                        padding: '10px',
-                                        transition: 'transform 0.3s ease-in-out, color 0.3s ease-in-out', // Suavizar a cor e a escala no hover
-                                        transform: isExpanded
-                                            ? 'scale(1.2) translateY(20px)'  // Ícones ficam mais abaixo quando expandido
-                                            : 'scale(1.5) translateY(-50px)', // Ícones sobem quando recolhido
+                                        justifyContent: 'center',  // Centraliza o ícone
+                                        minWidth: 'auto',  // Remove o espaçamento padrão entre o ícone e o texto
+                                        color: location.pathname === `/${item.rota.toLowerCase()}`
+                                            ? '#ffffff'  // Ícone ativo fica branco
+                                            : '#545454',  // Ícone inativo fica cinza
+                                        backgroundColor: location.pathname === `/${item.rota.toLowerCase()}`
+                                            ? (isExpanded ? '#545454' : '#545454')  // Se expandido e ativo, fundo cinza
+                                            : (isExpanded ? '#ffffff' : 'none'),  // Ícones inativos não têm fundo quando fechado
+                                        padding: isExpanded ? '15px' : '8px',  // Padding ao redor do ícone
+                                        borderRadius: isExpanded ? '27px' : '20px',
+                                        marginTop: isExpanded ? '15px' : '30px',
+                                        transition: 'transform 0.3s ease-in-out, color 0.3s ease-in-out',
+                                        transform: isExpanded ? 'scale(1.2) translateY(20px)' : 'scale(1.5) translateY(-50px)',
                                         '&:hover': {
-                                            color: '#1976d2', // Cor de hover padrão do MUI
+                                            color: '#000000',  // Muda a cor no hover
                                         },
+                                        boxShadow: location.pathname === `/${item.rota.toLowerCase()}`
+                                            ? '0 4px 10px rgba(0, 0, 0, 0.5)'  // Sombra ao redor do ícone ativo
+                                            : 'none',  // Sem sombra para ícones inativos
                                     }}
                                 >
                                     {item.icon}
                                 </ListItemIcon>
+
+                                {/* Texto ao lado do ícone (somente quando expandido) */}
                                 {isExpanded && (
                                     <Typography
                                         sx={{
-                                            marginTop: '50px',
-                                            marginLeft: 2, // Mantém o espaçamento entre o ícone e o texto
-                                            opacity: isExpanded ? 1 : 0,
-                                            transition: 'opacity 0.3s ease-in-out, color 0.3s ease-in-out', // Transição suave no hover
+                                            marginTop: '60px',  // Distância do ícone para o texto
+                                            marginLeft: 2,  // Margem à esquerda do texto
+                                            opacity: isExpanded ? 1 : 0,  // Opacidade muda conforme a expansão da barra
+                                            transition: 'opacity 0.3s ease-in-out, color 0.3s ease-in-out',
                                             '&:hover': {
-                                                color: '#000', // Deixa o texto mais escuro no hover
+                                                color: '#000',  // Muda a cor do texto no hover
                                             },
                                         }}
                                     >
@@ -139,7 +142,6 @@ export const Layout = () => {
                             </ListItem>
                         ))}
                     </List>
-
                 </Box>
 
                 {/* Conteúdo principal */}
