@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Rotas } from './routes/Router'
 
 
 function App() {
@@ -6,7 +7,7 @@ function App() {
 
   return (
     <>
-      <div>ola</div>
+      <Rotas />
     </>
   )
 }
