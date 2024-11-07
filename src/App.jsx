@@ -3,8 +3,6 @@ import { Rotas } from './routes/Router'
 
 
 function App() {
- 
-
   return (
     <>
       <Rotas />
