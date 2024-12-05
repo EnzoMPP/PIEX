@@ -7,6 +7,8 @@ import AddIcon from "@mui/icons-material/Add";
 import DashboardHeader from "./DashboardHeader";
 import DashboardMassGraph from "./DashboardMassGraph";
 import MedicalQuestionsModal from "./MedicalQuestionsModal";
+import DashboardGrowthGraph from "./DashboardGrowthGraph";
+import StudentObservation from "./StudentObservation";
 
 const DashboardContainer = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -27,25 +29,23 @@ const DashboardContainer = () => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          width: "100%",
         }}
       >
-        <IconButton aria-label="dropdown">
-          <NotesIcon />
-          <ArrowDropDown />
-        </IconButton>
+        <StudentObservation />
         <div>
-          <TextField label="Anotações" variant="filled" />
-          <IconButton sx={{ padding: "1rem" }} aria-label="adicionar">
-            <AddIcon />
-          </IconButton>
+          <Button variant="contained" color="primary" onClick={handleOpen}>
+            Formulário médico
+          </Button>
+          <MedicalQuestionsModal open={openModal} onClose={handleClose} />
         </div>
       </div>
+
       <DashboardGraph />
-      {/* <DashboardMassGraph /> */}
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Formulário médico
-      </Button>
-      <MedicalQuestionsModal open={openModal} onClose={handleClose} />
+      <div style={{ display: "flex" }}>
+        <DashboardMassGraph />
+        <DashboardGrowthGraph />
+      </div>
     </div>
   );
 };

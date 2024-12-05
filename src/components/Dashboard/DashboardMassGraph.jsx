@@ -1,118 +1,40 @@
-import { PieChart } from "@mui/icons-material";
-import {
-  Box,
-  Card,
-  CardContent,
-  colors,
-  styled,
-  Typography,
-} from "@mui/material";
-import { useDrawingArea } from "@mui/x-charts";
+import { Card, CardContent, Typography } from "@mui/material";
+import { Pie, Cell, Tooltip, Legend, PieChart } from "recharts";
 import React from "react";
-import PropTypes from "prop-types";
 
 const DashboardMassGraph = () => {
   const data = [
-    { label: "Massa magra", value: 50000 },
-    { label: "Massa gorda", value: 35000 },
+    { name: "Massa Magra", value: 60 }, // Exemplo: 60% de massa magra
+    { name: "Massa Gorda", value: 40 }, // Exemplo: 40% de massa gorda
   ];
 
-  const PieCenterLabel = (primaryText, secondaryText) => {
-    const { width, height, left, top } = useDrawingArea();
-    const primaryY = top + height / 2 - 10;
-    const secondaryY = primaryY + 24;
-
-    return (
-      <React.Fragment>
-        <StyledText variant="primary" x={left + width / 2} y={primaryY}>
-          {primaryText}
-        </StyledText>
-        <StyledText variant="secondary" x={left + width / 2} y={secondaryY}>
-          {secondaryText}
-        </StyledText>
-      </React.Fragment>
-    );
-  };
-
-  PieCenterLabel.propTypes = {
-    primaryText: PropTypes.string.isRequired,
-    secondaryText: PropTypes.string.isRequired,
-  };
-
-  const StyledText = styled("text", {
-    shouldForwardProp: (prop) => prop !== "variant",
-  })(({ theme }) => ({
-    textAnchor: "middle",
-    dominantBaseline: "central",
-    fill: (theme.vars || theme).palette.text.secondary,
-    variants: [
-      {
-        props: {
-          variant: "primary",
-        },
-        style: {
-          fontSize: theme.typography.h5.fontSize,
-        },
-      },
-      {
-        props: ({ variant }) => variant !== "primary",
-        style: {
-          fontSize: theme.typography.body2.fontSize,
-        },
-      },
-      {
-        props: {
-          variant: "primary",
-        },
-        style: {
-          fontWeight: theme.typography.h5.fontWeight,
-        },
-      },
-      {
-        props: ({ variant }) => variant !== "primary",
-        style: {
-          fontWeight: theme.typography.body2.fontWeight,
-        },
-      },
-    ],
-  }));
+  // Cores para as fatias do gráfico
+  const COLORS = ["#4caf50", "#f44336"];
 
   return (
-    <Card
-      variant="outlined"
-      sx={{ display: "flex", flexDirection: "column", gap: "8px", flexGrow: 1 }}
-    >
+    <Card>
       <CardContent>
-        <Typography component="h2" variant="subtitle2">
-          Users by country
+        <Typography variant="h6" gutterBottom>
+          Composição Corporal
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <PieChart
-            colors={colors}
-            margin={{
-              left: 80,
-              right: 80,
-              top: 80,
-              bottom: 80,
-            }}
-            series={[
-              {
-                data,
-                innerRadius: 75,
-                outerRadius: 100,
-                paddingAngle: 0,
-                highlightScope: { faded: "global", highlighted: "item" },
-              },
-            ]}
-            height={260}
-            width={260}
-            slotProps={{
-              legend: { hidden: true },
-            }}
+        <PieChart width={400} height={400}>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            fill="#8884d8"
+            label
           >
-            <PieCenterLabel primaryText="98.5K" secondaryText="Total" />
-          </PieChart>
-        </Box>
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
       </CardContent>
     </Card>
   );

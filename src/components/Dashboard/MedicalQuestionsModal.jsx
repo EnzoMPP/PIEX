@@ -161,7 +161,7 @@ const MedicalQuestionsModal = ({ open, onClose }) => {
 
         {/* Botões */}
         <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="error">
             Fechar
           </Button>
           <Button onClick={handleSave} color="primary" sx={{ marginLeft: 2 }}>
